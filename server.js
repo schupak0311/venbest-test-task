@@ -1,10 +1,8 @@
 /* eslint-disable no-console */
 import zmq from 'zeromq';
 import colors from 'colors';
-import { StringDecoder } from 'string_decoder';
 import { pub, sub } from './helpers/command-line-args.helper';
 
-const decode = new StringDecoder('utf-8');
 const sqlite3 = require('sqlite3').verbose();
 let db = new sqlite3.Database('./db/Users.sqlite3', sqlite3.OPEN_READWRITE, (err) => {
   if (err) {
@@ -45,11 +43,11 @@ sockSub.bindSync(`tcp://127.0.0.1:${sub}`);
 console.log(`Subscriber bound to port ${sub}!`.yellow);
 
 sockSub.on('message', (topic, message) => {
-  const data = JSON.parse(decode.write(message));
+  const data = JSON.parse(message.toString());
   let msg = {};
   console.log(
     '\nreceived a message related to:',
-    decode.write(topic).blue,
+    topic.toString().blue,
     'containing message:',
     data,
   );
@@ -69,7 +67,7 @@ sockSub.on('message', (topic, message) => {
           if (err) {
             console.log(err.message);
           }
-          if (!res.length) {
+          if (!res.length || res[0].passw !== data.pwd) {
             msg = {
               msg_id: data.msg_id,
               status: 'error',

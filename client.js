@@ -3,10 +3,8 @@ import zmq from 'zeromq';
 import uuid from 'uuidv4';
 import colors from 'colors';
 import readlinkSync from 'readline-sync';
-import { StringDecoder } from 'string_decoder';
 import { pub, sub } from './helpers/command-line-args.helper';
 
-const decode = new StringDecoder('utf-8');
 const sockPub = zmq.socket('pub');
 const sockSub = zmq.socket('sub');
 
@@ -29,10 +27,10 @@ const msg = {
 sockPub.send(['api_in', JSON.stringify(msg)]);
 
 sockSub.on('message', (topic, message) => {
-  const data = JSON.parse(decode.write(message));
+  const data = JSON.parse(message.toString());
   console.log(
     '\nreceived a message related to:',
-    decode.write(topic).blue,
+    topic.toString().blue,
     'containing message:',
     data,
   );
