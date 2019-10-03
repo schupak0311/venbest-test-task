@@ -38,20 +38,17 @@ with fields enter: 'login', email and pwd - data from the user, msg_id - randoml
 
 The first frame is `api_in`, the second:
 
-`` ``
 {
 type: "login",
 Email: "foo@bar.baz",
 pwd: "xxx",
 msg_id: "yyyy"
 }
-`` ``
 
 ## Outgoing message format ##
 
 The first frame is `api_out`, the second:
 
-`` ``
 // success:
 {
 msg_id: "yyyy", // equal to the value of the incoming message
@@ -65,22 +62,12 @@ msg_id: "yyyy",
 status: "error",
 error: "xxx"
 }
-`` ``
 
 The error field may take one of the following. values:
 
 `WRONG_PWD` - wrong login or password;
 `WRONG_FORMAT` - no one of the fields or fields are empty.
 
-## Table structure ##
-
-| Column | Type |
-| -------- |: ------------ |
-| user_id | INTEGER |
-| email | TEXT |
-| passw | TEXT |
-
-The `passw` column stores the unhashed password.
 
 ## Installation 
 
